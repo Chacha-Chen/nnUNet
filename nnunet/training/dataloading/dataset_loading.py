@@ -15,7 +15,7 @@
 from collections import OrderedDict
 import numpy as np
 from multiprocessing import Pool
-
+import logging
 from batchgenerators.dataloading.data_loader import SlimDataLoaderBase
 
 from nnunet.configuration import default_num_threads
@@ -309,7 +309,7 @@ class DataLoader3D(SlimDataLoaderBase):
                     # this only happens if some image does not contain foreground voxels at all
                     selected_class = None
                     voxels_of_that_class = None
-                    print('case does not contain any foreground classes', i)
+                    logging.debug('case does not contain any foreground classes', i)
                 else:
                     selected_class = np.random.choice(foreground_classes)
 
@@ -486,7 +486,7 @@ class DataLoader2D(SlimDataLoaderBase):
                 if len(foreground_classes) == 0:
                     selected_class = None
                     random_slice = np.random.choice(case_all_data.shape[1])
-                    print('case does not contain any foreground classes', i)
+                    logging.debug('case does not contain any foreground classes', i)
                 else:
                     selected_class = np.random.choice(foreground_classes)
 
