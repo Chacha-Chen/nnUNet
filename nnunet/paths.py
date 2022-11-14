@@ -42,6 +42,8 @@ else:
     nnUNet_cropped_data = nnUNet_raw_data = None
 
 if preprocessing_output_dir is not None:
+    # print(os.environ['nnUNet_preprocessed'])
+    # print(preprocessing_output_dir)
     maybe_mkdir_p(preprocessing_output_dir)
 else:
     print("nnUNet_preprocessed is not defined and nnU-Net can not be used for preprocessing "

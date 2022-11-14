@@ -644,6 +644,7 @@ def predict_from_folder(model: str, input_folder: str, output_folder: str, folds
     expected_num_modalities = load_pickle(join(model, "plans.pkl"))['num_modalities']
 
     # check input folder integrity
+    # print(input_folder)
     case_ids = check_input_folder_and_return_caseIDs(input_folder, expected_num_modalities)
 
     output_files = [join(output_folder, i + ".nii.gz") for i in case_ids]
