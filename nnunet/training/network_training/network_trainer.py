@@ -119,7 +119,7 @@ class NetworkTrainer(object):
             self.use_progress_bar = bool(int(os.environ['nnunet_use_progress_bar']))
 
         ################# Settings for saving checkpoints ##################################
-        self.save_every = 50
+        self.save_every = 10
         self.save_latest_only = True  # if false it will not store/overwrite _latest but separate files each
         # time an intermediate checkpoint is created
         self.save_intermediate_checkpoints = True  # whether or not to save checkpoint_latest
@@ -457,7 +457,8 @@ class NetworkTrainer(object):
                     train_losses_epoch.append(l)
 
             self.all_tr_losses.append(np.mean(train_losses_epoch))
-            self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])
+            tmp_str = "Epoch {}/{}".format(self.epoch+1, self.max_num_epochs) + " train loss : %.4f" % self.all_tr_losses[-1]
+            self.print_to_log_file(tmp_str)
 
             with torch.no_grad():
                 # validation with train=False
@@ -524,6 +525,19 @@ class NetworkTrainer(object):
                 self.save_checkpoint(join(self.output_folder, "model_ep_%03.0d.model" % (self.epoch + 1)))
             self.save_checkpoint(join(self.output_folder, "model_latest.model"))
             self.print_to_log_file("done")
+
+    def save_lastest_with_epoch_number(self):
+        """
+        Saves a checkpoint every save_ever epochs.
+        :return:
+        """
+        if self.epoch % self.save_every == (self.save_every - 1):
+            self.print_to_log_file(f"saving scheduled checkpoint file at epoch {self.epoch}...")
+            print(f"saving scheduled checkpoint file at epoch {self.epoch}...")
+            # if not self.save_latest_only:
+            self.save_checkpoint(join(self.output_folder, "model_ep_%03.0d.model" % (self.epoch + 1)))
+            # self.save_checkpoint(join(self.output_folder, "model_latest.model"))
+            # self.print_to_log_file("done")
 
     def update_eval_criterion_MA(self):
         """
@@ -611,6 +625,8 @@ class NetworkTrainer(object):
         self.maybe_update_lr()
 
         self.maybe_save_checkpoint()
+
+        # self.save_lastest_with_epoch_number()
 
         self.update_eval_criterion_MA()
 

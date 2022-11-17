@@ -411,6 +411,8 @@ class nnUNetTrainerV2(nnUNetTrainer):
         :return:
         """
         super().on_epoch_end()
+        # self.print_to_log_file("CHACHA SAVING CHECKPOINTS")
+        # self.save_lastest_with_epoch_number()
         continue_training = self.epoch < self.max_num_epochs
 
         # it can rarely happen that the momentum of nnUNetTrainerV2 is too high for some dataset. If at epoch 100 the
